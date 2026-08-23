@@ -315,6 +315,8 @@ export interface AppState {
   bindingPreference: "enabled" | "disabled";
   /** user preference whether arrow snap to midpoints while binding */
   isMidpointSnappingEnabled: boolean;
+  /** true while Shift+Alt are both held during line drawing (illegal combo) */
+  snapAngleIllegal: boolean;
   /**
    * The bindable element the UI highlights for the user when an arrow is
    * dragged or otherwise its endpoint being close to said element.
