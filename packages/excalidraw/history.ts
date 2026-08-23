@@ -12,6 +12,23 @@ import type { SceneElementsMap } from "@excalidraw/element/types";
 
 import type { AppState } from "./types";
 
+/** Descriptor for a library-drop undo checkpoint */
+export type LibraryDropDescriptor = {
+  kind: "library-drop";
+  elementIds: readonly string[];
+};
+
+/**
+ * Creates a descriptor for a library-drop undo checkpoint.
+ * Pass the ids of every element inserted by the drop so history can scope
+ * the undo checkpoint to exactly those elements.
+ */
+export function createLibraryDropDescriptor(
+  elementIds: readonly string[],
+): LibraryDropDescriptor {
+  return { kind: "library-drop", elementIds };
+}
+
 export class HistoryDelta extends StoreDelta {
   /**
    * Apply the delta to the passed elements and appState, does not modify the snapshot.
@@ -95,6 +112,17 @@ export class History {
   public readonly undoStack: HistoryDelta[] = [];
   public readonly redoStack: HistoryDelta[] = [];
 
+  /**
+   * Descriptor set by the library-drop handler before scheduleAction(IMMEDIATELY).
+   * Consumed once by record() to tag the resulting undo entry.
+   */
+  private pendingDropDescriptor: LibraryDropDescriptor | null = null;
+  public readonly dropDescriptors = new Map<string, LibraryDropDescriptor>();
+
+  public setPendingDropDescriptor(descriptor: LibraryDropDescriptor) {
+    this.pendingDropDescriptor = descriptor;
+  }
+
   public get isUndoStackEmpty() {
     return this.undoStack.length === 0;
   }
@@ -123,6 +151,11 @@ export class History {
     const historyDelta = HistoryDelta.inverse(delta);
 
     this.undoStack.push(historyDelta);
+
+    if (this.pendingDropDescriptor) {
+      this.dropDescriptors.set(historyDelta.id, this.pendingDropDescriptor);
+      this.pendingDropDescriptor = null;
+    }
 
     if (!historyDelta.elements.isEmpty()) {
       // don't reset redo stack on local appState changes,

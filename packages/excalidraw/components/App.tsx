@@ -362,7 +362,7 @@ import { exportCanvas, loadFromBlob } from "../data";
 import Library, { distributeLibraryItemsOnSquareGrid } from "../data/library";
 import { restoreAppState, restoreElements } from "../data/restore";
 import { getCenter, getDistance } from "../gesture";
-import { History } from "../history";
+import { History, createLibraryDropDescriptor } from "../history";
 import { defaultLang, getLanguage, languages, setLanguage, t } from "../i18n";
 
 import {
@@ -2466,6 +2466,10 @@ class App extends React.Component<AppProps, AppState> {
       position: "center",
       files: null,
     });
+    const descriptor = createLibraryDropDescriptor(elements.map((el) => el.id));
+    this.history.setPendingDropDescriptor(descriptor);
+    this.store.scheduleAction(CaptureUpdateAction.IMMEDIATELY);
+    this.setToast({ message: t("labels.libraryItemsAdded"), duration: 2500 });
   };
 
   public onExportImage = async (
