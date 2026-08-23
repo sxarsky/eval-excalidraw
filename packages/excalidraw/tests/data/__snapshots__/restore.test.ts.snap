@@ -100,7 +100,7 @@ exports[`restoreElements > should restore correctly with rectangle, ellipse and 
   "backgroundColor": "blue",
   "boundElements": [],
   "customData": undefined,
-  "fillStyle": "cross-hatch",
+  "fillStyle": "crosshatch",
   "frameId": null,
   "groupIds": [
     "1",
@@ -138,7 +138,7 @@ exports[`restoreElements > should restore correctly with rectangle, ellipse and 
   "backgroundColor": "blue",
   "boundElements": [],
   "customData": undefined,
-  "fillStyle": "cross-hatch",
+  "fillStyle": "crosshatch",
   "frameId": null,
   "groupIds": [
     "1",
@@ -176,7 +176,7 @@ exports[`restoreElements > should restore correctly with rectangle, ellipse and 
   "backgroundColor": "blue",
   "boundElements": [],
   "customData": undefined,
-  "fillStyle": "cross-hatch",
+  "fillStyle": "crosshatch",
   "frameId": null,
   "groupIds": [
     "1",
