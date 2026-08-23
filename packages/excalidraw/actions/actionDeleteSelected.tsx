@@ -1,5 +1,6 @@
 import {
   KEYS,
+  LOCKED_ELEMENT_TOAST_KEY,
   MOBILE_ACTION_BUTTON_BG,
   updateActiveTool,
 } from "@excalidraw/common";
@@ -108,6 +109,9 @@ const deleteSelectedElements = (
             });
           }
         });
+      }
+      if (el.locked) {
+        return el;
       }
       return newElementWith(el, { isDeleted: true });
     }
@@ -272,6 +276,9 @@ export const actionDeleteSelected = register({
       };
     }
 
+    const selectedElements = getSelectedElements(elements, appState);
+    const hasLockedSelected = selectedElements.some((el) => el.locked);
+
     let { elements: nextElements, appState: nextAppState } =
       deleteSelectedElements(elements, appState, app);
 
@@ -300,6 +307,9 @@ export const actionDeleteSelected = register({
       )
         ? CaptureUpdateAction.IMMEDIATELY
         : CaptureUpdateAction.EVENTUALLY,
+      ...(hasLockedSelected && {
+        toast: { message: t(LOCKED_ELEMENT_TOAST_KEY), duration: 3000 },
+      }),
     };
   },
   keyTest: (event, appState, elements) =>
