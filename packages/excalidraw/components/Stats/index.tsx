@@ -153,6 +153,8 @@ export const StatsInner = memo(
       height: 0,
     });
 
+    const [advancedStatsOpen, setAdvancedStatsOpen] = useState(false);
+
     const throttledSetSceneDimension = useMemo(
       () =>
         throttle((elements: readonly NonDeletedExcalidrawElement[]) => {
@@ -333,22 +335,37 @@ export const StatsInner = memo(
                           appState={appState}
                         />
                       </StatsRow>
-                      <StatsRow>
-                        <Angle
-                          property="angle"
-                          element={singleElement}
-                          scene={scene}
-                          appState={appState}
-                        />
-                      </StatsRow>
-                      <StatsRow>
-                        <FontSize
-                          property="fontSize"
-                          element={singleElement}
-                          scene={scene}
-                          appState={appState}
-                        />
-                      </StatsRow>
+                      <Collapsible
+                        label={
+                          <div
+                            aria-expanded={advancedStatsOpen}
+                            style={{ fontWeight: 500, fontSize: "0.8125rem" }}
+                          >
+                            {"Advanced"}
+                          </div>
+                        }
+                        open={advancedStatsOpen}
+                        openTrigger={() =>
+                          setAdvancedStatsOpen((v) => !v)
+                        }
+                      >
+                        <StatsRow>
+                          <Angle
+                            property="angle"
+                            element={singleElement}
+                            scene={scene}
+                            appState={appState}
+                          />
+                        </StatsRow>
+                        <StatsRow>
+                          <FontSize
+                            property="fontSize"
+                            element={singleElement}
+                            scene={scene}
+                            appState={appState}
+                          />
+                        </StatsRow>
+                      </Collapsible>
                     </>
                   )}
 
