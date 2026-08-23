@@ -162,7 +162,7 @@ body.excalidraw-cursor-resize * {
       margin-bottom: 0.25rem;
       font-size: 0.75rem;
       color: var(--text-primary-color);
-      font-weight: 400;
+      font-weight: 500;
       display: block;
     }
 
@@ -330,7 +330,7 @@ body.excalidraw-cursor-resize * {
     margin-bottom: var(--bar-padding);
 
     .selected-shape-actions {
-      padding: 8px 8px 0 8px;
+      padding: 12px 12px 0 12px;
     }
   }
 
