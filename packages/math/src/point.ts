@@ -253,3 +253,22 @@ export const isPointWithinBounds = <P extends GlobalPoint | LocalPoint>(
     q[1] >= Math.min(p[1], r[1])
   );
 };
+
+/**
+ * Returns the Euclidean distance between two points, accepting either tuple
+ * [x, y] or object {x, y} form. Mixing forms is supported.
+ *
+ * @param a The first point as a tuple [x, y] or object {x, y}
+ * @param b The second point as a tuple [x, y] or object {x, y}
+ * @returns The euclidean distance between the two points.
+ */
+export function distance2d(
+  a: [number, number] | { x: number; y: number },
+  b: [number, number] | { x: number; y: number },
+): number {
+  const ax = Array.isArray(a) ? a[0] : a.x;
+  const ay = Array.isArray(a) ? a[1] : a.y;
+  const bx = Array.isArray(b) ? b[0] : b.x;
+  const by = Array.isArray(b) ? b[1] : b.y;
+  return Math.hypot(bx - ax, by - ay);
+}
