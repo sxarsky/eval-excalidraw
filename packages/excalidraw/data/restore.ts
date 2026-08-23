@@ -98,6 +98,14 @@ type RestoredAppState = Omit<
 
 const MAX_ARROW_PX = 75_000;
 
+const VALID_FILL_STYLES = new Set<string>([
+  "hachure",
+  "crosshatch",
+  "solid",
+  "zigzag",
+  "dots",
+]);
+
 export const AllowedExcalidrawActiveTools: Record<
   AppState["activeTool"]["type"],
   boolean
@@ -291,7 +299,13 @@ const restoreElementWithProperties = <
     index: element.index ?? null,
     isDeleted: element.isDeleted ?? false,
     id: element.id || randomId(),
-    fillStyle: element.fillStyle || DEFAULT_ELEMENT_PROPS.fillStyle,
+    fillStyle: (() => {
+      const raw = element.fillStyle as string;
+      if (raw === "cross-hatch") return "crosshatch" as const;
+      return (VALID_FILL_STYLES.has(raw)
+        ? raw
+        : DEFAULT_ELEMENT_PROPS.fillStyle) as typeof DEFAULT_ELEMENT_PROPS.fillStyle;
+    })(),
     strokeWidth: element.strokeWidth || DEFAULT_ELEMENT_PROPS.strokeWidth,
     strokeStyle: element.strokeStyle ?? DEFAULT_ELEMENT_PROPS.strokeStyle,
     roughness: element.roughness ?? DEFAULT_ELEMENT_PROPS.roughness,

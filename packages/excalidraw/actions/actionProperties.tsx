@@ -507,16 +507,22 @@ export const actionChangeFillStyle = register<ExcalidrawElement["fillStyle"]>({
                 testId: `fill-hachure`,
               },
               {
-                value: "cross-hatch",
+                value: "crosshatch",
                 text: t("labels.crossHatch"),
                 icon: FillCrossHatchIcon,
-                testId: `fill-cross-hatch`,
+                testId: `fill-crosshatch`,
               },
               {
                 value: "solid",
                 text: t("labels.solid"),
                 icon: FillSolidIcon,
                 testId: `fill-solid`,
+              },
+              {
+                value: "dots",
+                text: t("labels.dots"),
+                icon: FillSolidIcon,
+                testId: `fill-dots`,
               },
             ]}
             value={getFormValue(
