@@ -1,4 +1,4 @@
-import { pointFrom, pointRotateRads } from "../src/point";
+import { distance2d, pointFrom, pointRotateRads } from "../src/point";
 
 import type { Radians } from "../src/types";
 
@@ -21,5 +21,23 @@ describe("rotate", () => {
       -angle as Radians,
     );
     expect(res2).toEqual([x1, x2]);
+  });
+});
+
+describe("distance2d", () => {
+  it("computes distance between two tuple-form points", () => {
+    expect(distance2d([0, 0], [3, 4])).toBe(5);
+  });
+
+  it("computes distance between two object-form points", () => {
+    expect(distance2d({ x: 0, y: 0 }, { x: 3, y: 4 })).toBe(5);
+  });
+
+  it("computes distance with mixed tuple and object forms", () => {
+    expect(distance2d([0, 0], { x: 3, y: 4 })).toBe(5);
+  });
+
+  it("returns 0 for the same point", () => {
+    expect(distance2d([0, 0], [0, 0])).toBe(0);
   });
 });
