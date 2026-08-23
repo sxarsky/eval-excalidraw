@@ -99,6 +99,7 @@
     "language": "Language",
     "liveCollaboration": "Live collaboration...",
     "duplicateSelection": "Duplicate",
+    "duplicated": "Duplicated {n} element(s)",
     "untitled": "Untitled",
     "name": "Name",
     "yourName": "Your name",
