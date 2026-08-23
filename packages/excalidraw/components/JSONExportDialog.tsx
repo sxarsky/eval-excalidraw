@@ -2,6 +2,8 @@ import React from "react";
 
 import { getFrame } from "@excalidraw/common";
 
+const ILLEGAL_CHARS = /[/\\:*?"<>|]/;
+
 import type { NonDeletedExcalidrawElement } from "@excalidraw/element/types";
 
 import { actionSaveFileToDisk } from "../actions/actionExport";
@@ -46,6 +48,9 @@ const JSONExportModal = ({
   canvas: HTMLCanvasElement;
 }) => {
   const { onExportToBackend } = exportOpts;
+  const projectName = appState.name;
+  const isProjectNameInvalid =
+    !projectName || ILLEGAL_CHARS.test(projectName);
   return (
     <div className="ExportDialog ExportDialog--json">
       <div className="ExportDialog-cards">
@@ -64,6 +69,7 @@ const JSONExportModal = ({
               title={t("exportDialog.disk_button")}
               aria-label={t("exportDialog.disk_button")}
               showAriaLabel={true}
+              disabled={isProjectNameInvalid}
               onClick={() => {
                 actionManager.executeAction(actionSaveFileToDisk, "ui");
               }}
