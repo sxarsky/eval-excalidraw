@@ -1,0 +1,26 @@
+# Skyramp Workspace Configuration for Excalidraw eval.
+# Copied into the cloned repo by eval-testbot.sh before the agent runs.
+# Excalidraw is a frontend-only PWA (Vite/React) — no backend API. Playwright
+# UI tests under tests/skyramp.
+workspace:
+  repoName: excalidraw/excalidraw
+  repoUrl: git@github.com:excalidraw/excalidraw.git
+metadata:
+  schemaVersion: v1
+  mcpVersion: 1.0.0
+  executorVersion: v1.0.0
+  createdAt: "2026-06-04T20:14:28.395Z"
+  updatedAt: "2026-06-04T20:14:28.403Z"
+services:
+  - serviceName: excalidraw-app
+    language: typescript
+    framework: playwright
+    testDirectory: tests/skyramp
+    api:
+      authType: none
+      authHeader: ""
+      baseUrl: http://localhost:3000
+    runtimeDetails:
+      serverStartCommand: docker compose -f docker-compose.eval.yml up -d excalidraw
+      runtime: docker
+      dockerNetwork: excalidraw_default

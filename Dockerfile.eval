@@ -1,0 +1,30 @@
+# Eval Dockerfile for Excalidraw.
+#
+# Identical to the upstream Dockerfile except it bumps the vite-plugin-pwa
+# maximumFileSizeToCacheInBytes limit from 2.3 MB to 3.0 MB before the
+# production build runs. This prevents the build from erroring out when
+# the main JS bundle slightly exceeds the default precache threshold.
+
+FROM --platform=${BUILDPLATFORM} node:24 AS build
+
+WORKDIR /opt/node_app
+
+COPY . .
+
+RUN --mount=type=cache,target=/root/.cache/yarn \
+    npm_config_target_arch=${TARGETARCH} yarn --network-timeout 600000
+
+# Raise the workbox precache limit to 3 MB so the production build succeeds
+# even when the main bundle slightly exceeds the 2.3 MB upstream default.
+RUN sed -i 's/maximumFileSizeToCacheInBytes: 2\.3 \* 1024 \*\* 2/maximumFileSizeToCacheInBytes: 3.0 * 1024 ** 2/' \
+    excalidraw-app/vite.config.mts
+
+ARG NODE_ENV=production
+
+RUN npm_config_target_arch=${TARGETARCH} yarn build:app:docker
+
+FROM nginx:1.27-alpine
+
+COPY --from=build /opt/node_app/excalidraw-app/build /usr/share/nginx/html
+
+HEALTHCHECK CMD wget -q -O /dev/null http://localhost || exit 1

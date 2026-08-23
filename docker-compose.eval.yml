@@ -1,0 +1,25 @@
+# Eval compose for Excalidraw.
+#
+# Problem: the production Vite/PWA build fails when the main JS bundle
+# exceeds the vite-plugin-pwa workbox precache limit. The upstream repo
+# sets this to 2.3 MB, but the bundle grows with new code; eval needs
+# a slightly higher limit so the Docker build succeeds.
+#
+# Fix: uses Dockerfile.eval (also in this fixture dir), which bumps
+# maximumFileSizeToCacheInBytes from 2.3 MB to 3.0 MB in vite.config.mts
+# before running the production build.
+#
+# REPO_PATH is exported by start-services.sh and interpolated here.
+services:
+  excalidraw:
+    build:
+      context: ${REPO_PATH}
+      dockerfile: Dockerfile.eval
+    ports:
+      - "3000:80"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 120s
