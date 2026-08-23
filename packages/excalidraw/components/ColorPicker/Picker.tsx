@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, useState } from "react";
+import React, { useEffect, useImperativeHandle, useRef, useState } from "react";
 
 import { EVENT } from "@excalidraw/common";
 
@@ -131,10 +131,12 @@ export const Picker = React.forwardRef(
       };
     }, [colorObj, onEyeDropperToggle]);
     const pickerRef = React.useRef<HTMLDivElement>(null);
+    const previousFocusRef = useRef<Element | null>(null);
 
     useImperativeHandle(ref, () => pickerRef.current!);
 
     useEffect(() => {
+      previousFocusRef.current = document.activeElement;
       pickerRef?.current?.focus();
     }, []);
 
@@ -160,6 +162,11 @@ export const Picker = React.forwardRef(
             if (handled) {
               event.preventDefault();
               event.stopPropagation();
+              if (event.key === "Escape") {
+                if (previousFocusRef.current instanceof HTMLElement) {
+                  previousFocusRef.current.focus();
+                }
+              }
             }
           }}
           className="color-picker-content properties-content"
