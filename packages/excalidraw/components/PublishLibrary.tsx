@@ -16,6 +16,7 @@ import { t } from "../i18n";
 
 import { Dialog } from "./Dialog";
 import DialogActionButton from "./DialogActionButton";
+import Spinner from "./Spinner";
 import { ToolButton } from "./ToolButton";
 import Trans from "./Trans";
 import { CloseIcon } from "./icons";
@@ -380,7 +381,23 @@ const PublishLibrary = ({
       className="publish-library"
     >
       {shouldRenderForm ? (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} style={{ position: "relative" }}>
+          {isSubmitting && (
+            <div
+              data-testid="publish-library-spinner"
+              style={{
+                position: "absolute",
+                inset: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "var(--popup-bg-color, rgba(255,255,255,0.7))",
+                zIndex: 1,
+              }}
+            >
+              <Spinner size="2em" />
+            </div>
+          )}
           <div className="publish-library-note">
             <Trans
               i18nKey="publishDialog.noteDescription"
@@ -520,12 +537,14 @@ const PublishLibrary = ({
               label={t("buttons.saveLibNames")}
               onClick={onDialogClose}
               data-testid="cancel-clear-canvas-button"
+              disabled={isSubmitting}
             />
             <DialogActionButton
               type="submit"
               label={t("buttons.submit")}
               actionType="primary"
               isLoading={isSubmitting}
+              disabled={isSubmitting}
             />
           </div>
         </form>
