@@ -87,12 +87,12 @@ describe("element locking", () => {
       const rect = API.createElement({
         type: "rectangle",
         backgroundColor: "red",
-        fillStyle: "cross-hatch",
+        fillStyle: "crosshatch",
       });
       API.setElements([rect]);
       API.setSelectedElements([rect]);
 
-      const crossHatchButton = queryByTestId(document.body, `fill-cross-hatch`);
+      const crossHatchButton = queryByTestId(document.body, `fill-crosshatch`);
       expect(crossHatchButton).toHaveClass("active");
     });
 
@@ -100,12 +100,12 @@ describe("element locking", () => {
       const rect = API.createElement({
         type: "rectangle",
         backgroundColor: COLOR_PALETTE.transparent,
-        fillStyle: "cross-hatch",
+        fillStyle: "crosshatch",
       });
       API.setElements([rect]);
       API.setSelectedElements([rect]);
 
-      const crossHatchButton = queryByTestId(document.body, `fill-cross-hatch`);
+      const crossHatchButton = queryByTestId(document.body, `fill-crosshatch`);
       expect(crossHatchButton).toBe(null);
     });
 

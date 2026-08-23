@@ -463,7 +463,7 @@ describe("restoreElements", () => {
       const element = API.createElement({
         type: elType as "rectangle" | "ellipse" | "diamond" | "embeddable",
         id: idCount.toString(),
-        fillStyle: "cross-hatch",
+        fillStyle: "crosshatch",
         strokeWidth: 2,
         strokeStyle: "dashed",
         roughness: 2,
