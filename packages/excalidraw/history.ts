@@ -12,6 +12,30 @@ import type { SceneElementsMap } from "@excalidraw/element/types";
 
 import type { AppState } from "./types";
 
+/** An operation in the collaborative history, attributed to an author */
+export type AuthoredOperation = {
+  authorId: string;
+  index: number;
+};
+
+/**
+ * Walk the history stack backwards from fromIndex, returning the index
+ * of the most recent operation attributed to selfAuthorId.
+ * Returns -1 if no such operation exists.
+ */
+export function walkOwnHistory(
+  operations: readonly AuthoredOperation[],
+  selfAuthorId: string,
+  fromIndex: number,
+): number {
+  for (let i = fromIndex; i >= 0; i--) {
+    if (operations[i].authorId === selfAuthorId) {
+      return i;
+    }
+  }
+  return -1;
+}
+
 export class HistoryDelta extends StoreDelta {
   /**
    * Apply the delta to the passed elements and appState, does not modify the snapshot.
@@ -94,6 +118,9 @@ export class History {
 
   public readonly undoStack: HistoryDelta[] = [];
   public readonly redoStack: HistoryDelta[] = [];
+
+  /** authorId of the most recently recorded undo entry, for per-author UI attribution */
+  public lastUndoAuthorId: string | null = null;
 
   public get isUndoStackEmpty() {
     return this.undoStack.length === 0;
