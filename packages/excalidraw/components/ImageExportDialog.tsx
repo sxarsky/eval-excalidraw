@@ -1,4 +1,4 @@
-import { exportToCanvas } from "@excalidraw/utils/export";
+import { exportToCanvas, exportToSvg } from "@excalidraw/utils/export";
 import React, { useEffect, useRef, useState } from "react";
 
 import {
@@ -91,11 +91,13 @@ const ImageExportModal = ({
   const [renderError, setRenderError] = useState<Error | null>(null);
 
   const { onCopy, copyStatus, resetCopyStatus } = useCopyStatus();
+  const { onCopy: onSvgCopy, copyStatus: svgCopyStatus, resetCopyStatus: resetSvgCopyStatus } = useCopyStatus();
 
   useEffect(() => {
     // if user changes setting right after export to clipboard, reset the status
     // so they don't have to wait for the timeout to click the button again
     resetCopyStatus();
+    resetSvgCopyStatus();
   }, [
     projectName,
     exportWithBackground,
@@ -103,6 +105,7 @@ const ImageExportModal = ({
     exportScale,
     embedScene,
     resetCopyStatus,
+    resetSvgCopyStatus,
   ]);
 
   const { exportedElements, exportingFrame } = prepareElementsForExport(
@@ -345,6 +348,36 @@ const ImageExportModal = ({
               {t("imageExportDialog.button.copyPngToClipboard")}
             </FilledButton>
           )}
+          <FilledButton
+            className="ImageExportModal__settings__buttons__button"
+            label={t("imageExportDialog.title.copySvgToClipboard")}
+            status={svgCopyStatus}
+            onClick={async () => {
+              try {
+                const svgElement = await exportToSvg({
+                  elements: exportedElements,
+                  appState: {
+                    ...appStateSnapshot,
+                    name: projectName,
+                    exportBackground: exportWithBackground,
+                    exportWithDarkMode,
+                    exportScale,
+                    exportEmbedScene: embedScene,
+                  },
+                  files,
+                  exportPadding: DEFAULT_EXPORT_PADDING,
+                });
+                const svgString = new XMLSerializer().serializeToString(svgElement);
+                await navigator.clipboard.writeText(svgString);
+                onSvgCopy();
+              } catch (error) {
+                console.error("Failed to copy SVG to clipboard", error);
+              }
+            }}
+            icon={copyIcon}
+          >
+            {t("imageExportDialog.button.copySvgToClipboard")}
+          </FilledButton>
         </div>
       </div>
     </div>
