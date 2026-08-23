@@ -90,6 +90,8 @@ const ImageExportModal = ({
   const previewRenderRequestIdRef = useRef(0);
   const [renderError, setRenderError] = useState<Error | null>(null);
 
+  const [exportError, setExportError] = useState<Error | null>(null);
+
   const { onCopy, copyStatus, resetCopyStatus } = useCopyStatus();
 
   useEffect(() => {
@@ -300,52 +302,76 @@ const ImageExportModal = ({
           />
         </ExportSetting>
 
-        <div className="ImageExportModal__settings__buttons">
-          <FilledButton
-            className="ImageExportModal__settings__buttons__button"
-            label={t("imageExportDialog.title.exportToPng")}
-            onClick={() =>
-              onExportImage(EXPORT_IMAGE_TYPES.png, exportedElements, {
-                exportingFrame,
-              })
-            }
-            icon={downloadIcon}
+        {exportError ? (
+          <div
+            data-testid="export-error-state"
+            className="ImageExportModal__settings__export-error"
           >
-            {t("imageExportDialog.button.exportToPng")}
-          </FilledButton>
-          <FilledButton
-            className="ImageExportModal__settings__buttons__button"
-            label={t("imageExportDialog.title.exportToSvg")}
-            onClick={() =>
-              onExportImage(EXPORT_IMAGE_TYPES.svg, exportedElements, {
-                exportingFrame,
-              })
-            }
-            icon={downloadIcon}
-          >
-            {t("imageExportDialog.button.exportToSvg")}
-          </FilledButton>
-          {(probablySupportsClipboardBlob || isFirefox) && (
+            <p>{exportError.message || "Export failed"}</p>
+            <FilledButton
+              data-testid="export-retry-button"
+              label="Try again"
+              onClick={() => setExportError(null)}
+            >
+              Try again
+            </FilledButton>
+          </div>
+        ) : (
+          <div className="ImageExportModal__settings__buttons">
             <FilledButton
               className="ImageExportModal__settings__buttons__button"
-              label={t("imageExportDialog.title.copyPngToClipboard")}
-              status={copyStatus}
+              label={t("imageExportDialog.title.exportToPng")}
               onClick={async () => {
-                await onExportImage(
-                  EXPORT_IMAGE_TYPES.clipboard,
-                  exportedElements,
-                  {
+                try {
+                  await onExportImage(EXPORT_IMAGE_TYPES.png, exportedElements, {
                     exportingFrame,
-                  },
-                );
-                onCopy();
+                  });
+                } catch (err: any) {
+                  setExportError(err instanceof Error ? err : new Error(String(err)));
+                }
               }}
-              icon={copyIcon}
+              icon={downloadIcon}
             >
-              {t("imageExportDialog.button.copyPngToClipboard")}
+              {t("imageExportDialog.button.exportToPng")}
             </FilledButton>
-          )}
-        </div>
+            <FilledButton
+              className="ImageExportModal__settings__buttons__button"
+              label={t("imageExportDialog.title.exportToSvg")}
+              onClick={async () => {
+                try {
+                  await onExportImage(EXPORT_IMAGE_TYPES.svg, exportedElements, {
+                    exportingFrame,
+                  });
+                } catch (err: any) {
+                  setExportError(err instanceof Error ? err : new Error(String(err)));
+                }
+              }}
+              icon={downloadIcon}
+            >
+              {t("imageExportDialog.button.exportToSvg")}
+            </FilledButton>
+            {(probablySupportsClipboardBlob || isFirefox) && (
+              <FilledButton
+                className="ImageExportModal__settings__buttons__button"
+                label={t("imageExportDialog.title.copyPngToClipboard")}
+                status={copyStatus}
+                onClick={async () => {
+                  await onExportImage(
+                    EXPORT_IMAGE_TYPES.clipboard,
+                    exportedElements,
+                    {
+                      exportingFrame,
+                    },
+                  );
+                  onCopy();
+                }}
+                icon={copyIcon}
+              >
+                {t("imageExportDialog.button.copyPngToClipboard")}
+              </FilledButton>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
