@@ -187,6 +187,18 @@ export const Sidebar = Object.assign(
       refPrevOpenSidebar.current = appState.openSidebar;
     }, [appState.openSidebar, onStateChange, props.name]);
 
+    // Sync sidebar open/closed state to URL query parameter
+    useEffect(() => {
+      const isSidebarOpen = appState.openSidebar?.name === props.name;
+      const url = new URL(window.location.href);
+      if (isSidebarOpen) {
+        url.searchParams.set("sidebar", props.name);
+      } else {
+        url.searchParams.delete("sidebar");
+      }
+      window.history.replaceState(null, "", url.toString());
+    }, [appState.openSidebar, props.name]);
+
     const [mounted, setMounted] = useState(false);
     useLayoutEffect(() => {
       setMounted(true);

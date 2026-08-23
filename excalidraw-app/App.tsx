@@ -21,6 +21,7 @@ import { ShareableLinkDialog } from "@excalidraw/excalidraw/components/Shareable
 import Trans from "@excalidraw/excalidraw/components/Trans";
 import {
   APP_NAME,
+  DEFAULT_SIDEBAR,
   EVENT,
   THEME,
   VERSION_TIMEOUT,
@@ -432,6 +433,26 @@ const ExcalidrawWrapper = () => {
         delete window.visualDebug;
       }
       forceRefresh((prev) => !prev);
+    }
+  }, [excalidrawAPI]);
+
+  // On mount, open the library sidebar if ?sidebar=library is in the URL
+  useEffect(() => {
+    if (!excalidrawAPI) {
+      return;
+    }
+    const sidebarParam = new URLSearchParams(window.location.search).get(
+      "sidebar",
+    );
+    if (sidebarParam === DEFAULT_SIDEBAR.name) {
+      excalidrawAPI.updateScene({
+        appState: {
+          openSidebar: {
+            name: DEFAULT_SIDEBAR.name,
+            tab: DEFAULT_SIDEBAR.defaultTab,
+          },
+        },
+      });
     }
   }, [excalidrawAPI]);
 
