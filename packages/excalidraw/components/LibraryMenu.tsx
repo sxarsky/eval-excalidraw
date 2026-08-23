@@ -55,6 +55,11 @@ import type {
 } from "../types";
 import type Library from "../data/library";
 
+import {
+  isValidVisibilityTransition,
+  type LibraryItemVisibility,
+} from "../libraryVisibility";
+
 export const isLibraryMenuOpenAtom = atom(false);
 
 const LibraryMenuWrapper = ({ children }: { children: React.ReactNode }) => {
@@ -100,6 +105,16 @@ const LibraryMenuContent = memo(
                 errorMessage: t(`errors.libraryElementTypeError.${type}`),
               });
             }
+          }
+          // Guard: new items start as "private" visibility; validate the
+          // initial state is a permitted starting point before adding.
+          // Guard: enforce stepwise visibility transition before persisting
+          if (!isValidVisibilityTransition(
+            "private" as LibraryItemVisibility,
+            "team-shared" as LibraryItemVisibility,
+          )) {
+            console.warn("[Library] Invalid visibility transition — skipping publish");
+            return;
           }
           const nextItems: LibraryItems = [
             {
