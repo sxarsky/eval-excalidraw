@@ -93,6 +93,7 @@ export const createUndoAction: ActionCreator = (history) => ({
         size={data?.size || "medium"}
         disabled={isUndoStackEmpty}
         data-testid="button-undo"
+        data-author-undo={history.lastUndoAuthorId ?? "none"}
         style={{
           ...(isMobile ? MOBILE_ACTION_BUTTON_BG : {}),
         }}
