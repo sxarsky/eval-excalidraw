@@ -494,39 +494,6 @@ export const distributeLibraryItemsOnSquareGrid = (
   return resElements;
 };
 
-export const validateLibraryUrl = (
-  libraryUrl: string,
-  /**
-   * @returns `true` if the URL is valid, throws otherwise.
-   */
-  validator:
-    | ((libraryUrl: string) => boolean)
-    | string[] = ALLOWED_LIBRARY_URLS,
-): true => {
-  if (
-    typeof validator === "function"
-      ? validator(libraryUrl)
-      : validator.some((allowedUrlDef) => {
-          const allowedUrl = new URL(
-            `https://${allowedUrlDef.replace(/^https?:\/\//, "")}`,
-          );
-
-          const { hostname, pathname } = new URL(libraryUrl);
-
-          return (
-            new RegExp(`(^|\\.)${allowedUrl.hostname}$`).test(hostname) &&
-            new RegExp(
-              `^${allowedUrl.pathname.replace(/\/+$/, "")}(/+|$)`,
-            ).test(pathname)
-          );
-        })
-  ) {
-    return true;
-  }
-
-  throw new Error(`Invalid or disallowed library URL: "${libraryUrl}"`);
-};
-
 export const parseLibraryTokensFromUrl = () => {
   const libraryUrl =
     // current
@@ -728,7 +695,30 @@ export const useHandleLibrary = (
 
           libraryUrl = toValidURL(libraryUrl);
 
-          validateLibraryUrl(libraryUrl, optsRef.current.validateLibraryUrl);
+          const validator =
+            optsRef.current.validateLibraryUrl ?? ALLOWED_LIBRARY_URLS;
+          const isAllowed =
+            typeof validator === "function"
+              ? validator(libraryUrl)
+              : validator.some((allowedUrlDef) => {
+                  const allowedUrl = new URL(
+                    `https://${allowedUrlDef.replace(/^https?:\/\//, "")}`,
+                  );
+                  const { hostname, pathname } = new URL(libraryUrl);
+                  return (
+                    new RegExp(`(^|\\.)${allowedUrl.hostname}$`).test(
+                      hostname,
+                    ) &&
+                    new RegExp(
+                      `^${allowedUrl.pathname.replace(/\/+$/, "")}(/+|$)`,
+                    ).test(pathname)
+                  );
+                });
+          if (!isAllowed) {
+            throw new Error(
+              `Invalid or disallowed library URL: "${libraryUrl}"`,
+            );
+          }
 
           const request = await fetch(libraryUrl);
           const blob = await request.blob();
