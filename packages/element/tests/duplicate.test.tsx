@@ -425,6 +425,8 @@ describe("group-related duplication", () => {
       h.app.actionManager.executeAction(actionDuplicateSelection);
     });
 
+    expect(h.state.toast?.message).toMatch(/^Duplicated \d+ element\(s\)$/);
+
     assertElements(h.elements, [
       { id: rectangle1.id },
       { id: rectangle2.id },
@@ -537,6 +539,8 @@ describe("duplication z-order", () => {
       h.app.actionManager.executeAction(actionDuplicateSelection);
     });
 
+    expect(h.state.toast?.message).toMatch(/^Duplicated \d+ element\(s\)$/);
+
     assertElements(h.elements, [
       { id: rectangle1.id },
       { [ORIG_ID]: rectangle1.id, selected: true },
@@ -568,6 +572,8 @@ describe("duplication z-order", () => {
     act(() => {
       h.app.actionManager.executeAction(actionDuplicateSelection);
     });
+
+    expect(h.state.toast?.message).toMatch(/^Duplicated \d+ element\(s\)$/);
 
     assertElements(h.elements, [
       { id: rectangle1.id },

@@ -36,6 +36,8 @@ describe("actionDuplicateSelection", () => {
         h.app.actionManager.executeAction(actionDuplicateSelection);
       });
 
+      expect(h.state.toast?.message).toMatch(/^Duplicated \d+ element\(s\)$/);
+
       assertElements(h.elements, [
         { id: frame.id },
         { id: rectangle.id, frameId: frame.id },
@@ -57,6 +59,8 @@ describe("actionDuplicateSelection", () => {
       act(() => {
         h.app.actionManager.executeAction(actionDuplicateSelection);
       });
+
+      expect(h.state.toast?.message).toMatch(/^Duplicated \d+ element\(s\)$/);
 
       assertElements(h.elements, [
         { id: frame.id },
@@ -85,6 +89,8 @@ describe("actionDuplicateSelection", () => {
       act(() => {
         h.app.actionManager.executeAction(actionDuplicateSelection);
       });
+
+      expect(h.state.toast?.message).toMatch(/^Duplicated \d+ element\(s\)$/);
 
       assertElements(h.elements, [
         { id: frame.id },
@@ -119,6 +125,8 @@ describe("actionDuplicateSelection", () => {
       act(() => {
         h.app.actionManager.executeAction(actionDuplicateSelection);
       });
+
+      expect(h.state.toast?.message).toMatch(/^Duplicated \d+ element\(s\)$/);
 
       assertElements(h.elements, [
         { id: rectangle.id, frameId: frame.id },
@@ -157,6 +165,8 @@ describe("actionDuplicateSelection", () => {
         h.app.actionManager.executeAction(actionDuplicateSelection);
       });
 
+      expect(h.state.toast?.message).toMatch(/^Duplicated \d+ element\(s\)$/);
+
       assertElements(h.elements, [
         { id: frame.id },
         { id: rectangle.id, frameId: frame.id },
@@ -177,6 +187,8 @@ describe("actionDuplicateSelection", () => {
       act(() => {
         h.app.actionManager.executeAction(actionDuplicateSelection);
       });
+
+      expect(h.state.toast?.message).toMatch(/^Duplicated \d+ element\(s\)$/);
 
       assertElements(h.elements, [
         { id: frame.id },
@@ -205,6 +217,8 @@ describe("actionDuplicateSelection", () => {
         h.app.actionManager.executeAction(actionDuplicateSelection);
       });
 
+      expect(h.state.toast?.message).toMatch(/^Duplicated \d+ element\(s\)$/);
+
       assertElements(h.elements, [
         { id: frame.id },
         { id: rectangle.id, frameId: frame.id },
@@ -232,6 +246,8 @@ describe("actionDuplicateSelection", () => {
         h.app.actionManager.executeAction(actionDuplicateSelection);
       });
 
+      expect(h.state.toast?.message).toMatch(/^Duplicated \d+ element\(s\)$/);
+
       assertElements(h.elements, [
         { id: frame.id },
         { id: rectangle.id, frameId: frame.id },
@@ -253,6 +269,8 @@ describe("actionDuplicateSelection", () => {
       act(() => {
         h.app.actionManager.executeAction(actionDuplicateSelection);
       });
+
+      expect(h.state.toast?.message).toMatch(/^Duplicated \d+ element\(s\)$/);
 
       assertElements(h.elements, [
         { id: frame.id },
@@ -277,6 +295,8 @@ describe("actionDuplicateSelection", () => {
       act(() => {
         h.app.actionManager.executeAction(actionDuplicateSelection);
       });
+
+      expect(h.state.toast?.message).toMatch(/^Duplicated \d+ element\(s\)$/);
 
       assertElements(h.elements, [
         { id: frame.id },
@@ -322,6 +342,8 @@ describe("actionDuplicateSelection", () => {
         h.app.actionManager.executeAction(actionDuplicateSelection);
       });
 
+      expect(h.state.toast?.message).toMatch(/^Duplicated \d+ element\(s\)$/);
+
       assertElements(h.elements, [
         { id: rect1.id, frameId: frame1.id },
         { id: frame1.id },
@@ -365,6 +387,8 @@ describe("actionDuplicateSelection", () => {
         h.app.actionManager.executeAction(actionDuplicateSelection);
       });
 
+      expect(h.state.toast?.message).toMatch(/^Duplicated \d+ element\(s\)$/);
+
       assertElements(h.elements, [
         { id: rect1.id, frameId: frame1.id },
         { id: frame1.id },
@@ -391,6 +415,8 @@ describe("actionDuplicateSelection", () => {
         h.app.actionManager.executeAction(actionDuplicateSelection);
       });
 
+      expect(h.state.toast?.message).toMatch(/^Duplicated \d+ element\(s\)$/);
+
       assertElements(h.elements, [
         { id: arrow.id },
         { id: text.id, containerId: arrow.id },
@@ -409,6 +435,8 @@ describe("actionDuplicateSelection", () => {
       act(() => {
         h.app.actionManager.executeAction(actionDuplicateSelection);
       });
+
+      expect(h.state.toast?.message).toMatch(/^Duplicated \d+ element\(s\)$/);
 
       assertElements(h.elements, [
         { id: arrow.id },
@@ -441,6 +469,8 @@ describe("actionDuplicateSelection", () => {
       act(() => {
         h.app.actionManager.executeAction(actionDuplicateSelection);
       });
+
+      expect(h.state.toast?.message).toMatch(/^Duplicated \d+ element\(s\)$/);
 
       assertElements(h.elements, [
         { id: rectangle.id, frameId: frame.id },
@@ -476,6 +506,8 @@ describe("actionDuplicateSelection", () => {
       act(() => {
         h.app.actionManager.executeAction(actionDuplicateSelection);
       });
+
+      expect(h.state.toast?.message).toMatch(/^Duplicated \d+ element\(s\)$/);
 
       assertElements(h.elements, [
         { id: rectangle.id, frameId: frame.id },
@@ -519,6 +551,8 @@ describe("actionDuplicateSelection", () => {
       act(() => {
         h.app.actionManager.executeAction(actionDuplicateSelection);
       });
+
+      expect(h.state.toast?.message).toMatch(/^Duplicated \d+ element\(s\)$/);
 
       assertElements(h.elements, [
         { id: ellipse.id },
