@@ -22,6 +22,7 @@ import {
   selectGroupsForSelectedElements,
   getElementsInGroup,
   addToGroup,
+  ungroupOutermost,
   removeFromSelectedGroups,
   isElementInGroup,
 } from "@excalidraw/element";
@@ -255,6 +256,17 @@ export const actionUngroup = register({
     );
 
     const selectedElements = app.scene.getSelectedElements(appState);
+    // For nested groups, strip the outermost groupId from each selected element
+    // so that Ungroup on a nested selection only removes the outer layer.
+    const ungroupedElements = ungroupOutermost(selectedElements);
+    const ungroupedById = new Map(ungroupedElements.map((el) => [el.id, el]));
+    nextElements = nextElements.map((el) => {
+      const updated = ungroupedById.get(el.id);
+      if (updated && updated.groupIds.length < el.groupIds.length) {
+        return newElementWith(el, { groupIds: updated.groupIds });
+      }
+      return el;
+    });
 
     const selectedElementFrameIds = new Set(
       selectedElements
@@ -298,6 +310,7 @@ export const actionUngroup = register({
       appState: { ...appState, ...updateAppState },
       elements: nextElements,
       captureUpdate: CaptureUpdateAction.IMMEDIATELY,
+      toast: { message: t("labels.outerGroupRemoved"), duration: 2000 },
     };
   },
   keyTest: (event) =>

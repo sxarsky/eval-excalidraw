@@ -479,3 +479,30 @@ export const getSelectedElementsByGroup = (
   });
   return Array.from(groups.values()).concat(Array.from(elements.values()));
 };
+
+/**
+ * Appends a new group id to each element's groupIds array, enabling
+ * nested grouping (groups inside groups). The new id becomes the outermost
+ * (shallowest) group.
+ */
+export const addGroupId = (
+  elements: readonly ExcalidrawElement[],
+  groupId: GroupId,
+): ExcalidrawElement[] =>
+  elements.map((el) => ({
+    ...el,
+    groupIds: [...el.groupIds, groupId],
+  }));
+
+/**
+ * Removes the outermost (shallowest / last) group id from each element,
+ * effectively un-grouping a nested set of elements from their enclosing group
+ * while keeping any inner groups intact.
+ */
+export const ungroupOutermost = (
+  elements: readonly ExcalidrawElement[],
+): ExcalidrawElement[] =>
+  elements.map((el) => ({
+    ...el,
+    groupIds: el.groupIds.slice(0, -1),
+  }));
