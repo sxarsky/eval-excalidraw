@@ -234,6 +234,9 @@ export const CANVAS_ONLY_ACTIONS = ["selectAll"];
 export const DEFAULT_GRID_SIZE = 20;
 export const DEFAULT_GRID_STEP = 5;
 
+/** Pixel offset applied to x and y when duplicating elements via Ctrl/Cmd+D */
+export const DUPLICATE_OFFSET = DEFAULT_GRID_SIZE / 2;
+
 export const IMAGE_MIME_TYPES = {
   svg: "image/svg+xml",
   png: "image/png",
