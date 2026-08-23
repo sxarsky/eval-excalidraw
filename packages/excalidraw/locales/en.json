@@ -109,6 +109,7 @@
     "toggleGrid": "Toggle grid",
     "addToLibrary": "Add to library",
     "removeFromLibrary": "Remove from library",
+    "libraryItemsAdded": "Library items added — Ctrl+Z to undo",
     "libraryLoadingMessage": "Loading library…",
     "libraries": "Browse libraries",
     "loadingScene": "Loading scene…",
