@@ -205,6 +205,7 @@ export const textWysiwyg = ({
   excalidrawContainer,
   app,
   autoSelect = true,
+  editMode = "floating" as "floating" | "inline",
   initialCaretSceneCoords = null,
 }: {
   id: ExcalidrawElement["id"];
@@ -222,6 +223,12 @@ export const textWysiwyg = ({
   excalidrawContainer: HTMLDivElement | null;
   app: App;
   autoSelect?: boolean;
+  /**
+   * Controls the editing surface. "floating" (default) mounts a floating
+   * textarea; "inline" positions the editor directly at element coordinates
+   * and sets data-type="wysiwyg-inline" on the editable element.
+   */
+  editMode?: "floating" | "inline";
   initialCaretSceneCoords?: { x: number; y: number } | null;
 }): SubmitHandler => {
   let currentTextLayout: {
@@ -427,7 +434,10 @@ export const textWysiwyg = ({
 
   editable.dir = "auto";
   editable.tabIndex = 0;
-  editable.dataset.type = "wysiwyg";
+  editable.dataset.type = editMode === "inline" ? "wysiwyg-inline" : "wysiwyg";
+  if (editMode === "inline") {
+    editable.classList.add("excalidraw-wysiwyg--inline");
+  }
   // prevent line wrapping on Safari
   editable.wrap = "off";
   editable.classList.add("excalidraw-wysiwyg");
