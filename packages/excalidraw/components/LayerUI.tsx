@@ -56,6 +56,7 @@ import { EyeDropper, activeEyeDropperAtom } from "./EyeDropper";
 import { FixedSideContainer } from "./FixedSideContainer";
 import { HelpDialog } from "./HelpDialog";
 import { HintViewer } from "./HintViewer";
+import { SnapOverlay } from "./SnapOverlay";
 import { ImageExportDialog } from "./ImageExportDialog";
 import { Island } from "./Island";
 import { JSONExportDialog } from "./JSONExportDialog";
@@ -341,6 +342,7 @@ const LayerUI = ({
                             editorInterface={editorInterface}
                             app={app}
                           />
+                          {appState.snapAngleIllegal && <SnapOverlay />}
                           {heading}
                           <Stack.Row gap={spacing.toolbarInnerRowGap}>
                             <PenModeButton

@@ -15,6 +15,7 @@ import {
   vectorSubtract,
   vectorDot,
   vectorNormalize,
+  snapAngle,
 } from "@excalidraw/math";
 
 import {
@@ -9431,6 +9432,17 @@ class App extends React.Component<AppProps, AppState> {
         );
       }
 
+      // Snap the initial angle when Shift or Alt is held during line drawing.
+      const snappedAngle = snapAngle(0, {
+        shift: event.shiftKey,
+        alt: event.altKey,
+      });
+      if (snappedAngle.illegal) {
+        this.setState({ snapAngleIllegal: true });
+      } else {
+        this.setState({ snapAngleIllegal: false });
+      }
+
       // NOTE: We need the flushSync here for the
       // delayed bind mode change to see the right state
       // (specifically the `newElement`)
@@ -9448,6 +9460,9 @@ class App extends React.Component<AppProps, AppState> {
             linearElementEditor = {
               ...linearElementEditor,
               selectedPointsIndices: [endIdx],
+              customLineAngle: snappedAngle.illegal
+                ? null
+                : snappedAngle.angle,
               initialState: {
                 ...linearElementEditor.initialState,
                 arrowStartIsInside: event.altKey,
