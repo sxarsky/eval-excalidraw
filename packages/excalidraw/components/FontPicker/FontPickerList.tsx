@@ -398,12 +398,25 @@ export const FontPickerList = React.memo(
             onChange={debounce(setSearchTerm, 20)}
           />
         )}
-        <ScrollableList
-          className="dropdown-menu fonts manual-hover"
-          placeholder={t("fontList.empty")}
-        >
-          {groups.length ? groups : null}
-        </ScrollableList>
+        {filteredFonts.length === 0 && searchTerm.length > 0 ? (
+          <div
+            data-testid="font-picker-no-results"
+            style={{
+              padding: "0.75rem",
+              textAlign: "center",
+              color: "var(--text-primary-color)",
+            }}
+          >
+            {t("fontList.empty")}
+          </div>
+        ) : (
+          <ScrollableList
+            className="dropdown-menu fonts manual-hover"
+            placeholder={t("fontList.empty")}
+          >
+            {groups.length ? groups : null}
+          </ScrollableList>
+        )}
       </PropertiesPopover>
     );
   },
