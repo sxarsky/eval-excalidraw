@@ -19,6 +19,8 @@
     "convertToCode": "Convert to code",
     "bringForward": "Bring forward",
     "sendToBack": "Send to back",
+    "sentToBack": "Sent to back",
+    "reorderConflict": "Reorder conflict — retrying",
     "bringToFront": "Bring to front",
     "sendBackward": "Send backward",
     "delete": "Delete",

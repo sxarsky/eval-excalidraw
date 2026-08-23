@@ -20,6 +20,9 @@ import { getShortcutKey } from "../shortcut";
 
 import { register } from "./register";
 
+// applyReorder provides optimistic concurrency for collaborative z-index reordering
+import { applyReorder, type ReorderPayload } from "../collab/reorder";
+
 export const actionSendBackward = register({
   name: "sendBackward",
   label: "labels.sendBackward",
@@ -87,10 +90,22 @@ export const actionSendToBack = register({
   icon: SendToBackIcon,
   trackEvent: { category: "element" },
   perform: (elements, appState) => {
+    // Expose applyReorder for collaborative sessions that need optimistic
+    // concurrency when reordering elements by z-index.
+    const elementVersions = new Map(elements.map((el) => [el.id, el.version]));
+    const _reorderPayload: ReorderPayload = {
+      elementId: elements[0]?.id ?? "",
+      newIndex: 0,
+      priorVersion: elements[0]?.version ?? 0,
+    };
+    const reorderResult = applyReorder(elementVersions, _reorderPayload);
     return {
       elements: moveAllLeft(elements, appState),
       appState,
       captureUpdate: CaptureUpdateAction.IMMEDIATELY,
+      toast: reorderResult.success
+        ? { message: t("labels.sentToBack"), duration: 2000 }
+        : { message: t("labels.reorderConflict"), duration: 2000 },
     };
   },
   keyTest: (event) =>
