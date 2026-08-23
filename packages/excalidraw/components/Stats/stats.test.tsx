@@ -217,6 +217,7 @@ describe("stats for a generic element", () => {
     testInputProperty(rectangle, "height", "H", 100, 200);
     testInputProperty(rectangle, "x", "X", initialX, 230);
     testInputProperty(rectangle, "y", "Y", initialY, 220);
+    fireEvent.click(elementStats!.querySelector('[aria-expanded]')!);
     testInputProperty(rectangle, "angle", "A", 0, 45);
   });
 
@@ -263,6 +264,7 @@ describe("stats for a generic element", () => {
     expect(xInput.value).toBe(topLeftX.toString());
     expect(yInput.value).toBe(topLeftY.toString());
 
+    fireEvent.click(elementStats!.querySelector('[aria-expanded]')!);
     testInputProperty(rectangle, "angle", "A", 0, 45);
 
     let [newTopLeftX, newTopLeftY] = pointRotateRads(
@@ -288,6 +290,7 @@ describe("stats for a generic element", () => {
   it("should fix top left corner when width or height is changed", () => {
     const rectangle = h.elements[0];
 
+    fireEvent.click(elementStats!.querySelector('[aria-expanded]')!);
     testInputProperty(rectangle, "angle", "A", 0, 45);
     let [cx, cy] = [
       rectangle.x + rectangle.width / 2,
@@ -369,6 +372,7 @@ describe("stats for a non-generic element", () => {
     elementStats = stats?.querySelector("#elementStats");
 
     // can change font size
+    fireEvent.click(elementStats!.querySelector('[aria-expanded]')!);
     const input = UI.queryStatsProperty("F")?.querySelector(
       ".drag-input",
     ) as HTMLInputElement;
@@ -470,6 +474,7 @@ describe("stats for a non-generic element", () => {
     API.setElements([container, text]);
 
     API.setSelectedElements([container]);
+    fireEvent.click(elementStats!.querySelector('[aria-expanded]')!);
     const fontSize = UI.queryStatsProperty("F")?.querySelector(
       ".drag-input",
     ) as HTMLInputElement;
@@ -542,6 +547,7 @@ describe("stats for multiple elements", () => {
       ".drag-input",
     ) as HTMLInputElement;
     expect(height?.value).toBe("Mixed");
+    fireEvent.click(elementStats!.querySelector('[aria-expanded]')!);
     const angle = UI.queryStatsProperty("A")?.querySelector(
       ".drag-input",
     ) as HTMLInputElement;
@@ -604,6 +610,7 @@ describe("stats for multiple elements", () => {
     expect(height).toBeDefined();
     expect(height.value).toBe("Mixed");
 
+    fireEvent.click(elementStats!.querySelector('[aria-expanded]')!);
     const angle = UI.queryStatsProperty("A")?.querySelector(
       ".drag-input",
     ) as HTMLInputElement;
