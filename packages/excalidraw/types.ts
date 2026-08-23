@@ -315,6 +315,8 @@ export interface AppState {
   bindingPreference: "enabled" | "disabled";
   /** user preference whether arrow snap to midpoints while binding */
   isMidpointSnappingEnabled: boolean;
+  /** tracks the active drag action kind for the current pointer event */
+  currentDragAction: "drag" | "duplicate-drag" | null;
   /**
    * The bindable element the UI highlights for the user when an arrow is
    * dragged or otherwise its endpoint being close to said element.

@@ -423,6 +423,8 @@ import { LaserTrails } from "../laser-trails";
 import { withBatchedUpdates, withBatchedUpdatesThrottled } from "../reactUtils";
 import { isPointHittingTextAutoResizeHandle } from "../textAutoResizeHandle";
 import { textWysiwyg } from "../wysiwyg/textWysiwyg";
+import { handleSelectPointerEvent } from "../handlers/selectPointerHandler";
+import { resolveDragAction } from "../handlers/dragAction";
 import { isOverScrollBars } from "../scene/scrollbars";
 
 import { isMaybeMermaidDefinition } from "../mermaid";
@@ -2144,6 +2146,7 @@ class App extends React.Component<AppProps, AppState> {
     return (
       <div
         translate="no"
+        data-drag-action={this.state.currentDragAction ?? "none"}
         className={clsx("excalidraw excalidraw-container notranslate", {
           "excalidraw--view-mode":
             this.state.viewModeEnabled ||
@@ -8935,6 +8938,21 @@ class App extends React.Component<AppProps, AppState> {
         });
       }
     }
+
+    handleSelectPointerEvent({
+      type: "pointerdown",
+      target: pointerDownState.resize.handleType
+        ? "handle"
+        : pointerDownState.hit.element
+        ? "element"
+        : "canvas",
+      elementId: pointerDownState.hit.element?.id,
+      handleIndex: pointerDownState.resize.handleType ? 0 : undefined,
+      appState: { activeTool: this.state.activeTool, editingGroupId: this.state.editingGroupId },
+    });
+    // Alt-drag: duplicate-drag descriptor fires when altKey held at drag start.
+    const dragAction = resolveDragAction({ altKey: event.altKey, dx: 0, dy: 0 });
+    this.setState({ currentDragAction: dragAction.kind });
     return false;
   };
 
