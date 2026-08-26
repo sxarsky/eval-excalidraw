@@ -269,6 +269,52 @@ describe("library menu", () => {
       ]);
     });
   });
+
+  it("should clear all library items via the reset-library confirm dialog", async () => {
+    const { container } = await render(<Excalidraw />);
+
+    await act(async () => {
+      await h.app.library.setLibrary([
+        {
+          id: "1",
+          status: "unpublished",
+          elements: [API.createElement({ id: "elem_1", type: "rectangle" })],
+          created: 1,
+        },
+      ]);
+    });
+
+    fireEvent.click(container.querySelector(".sidebar-trigger")!);
+    fireEvent.click(
+      queryByTestId(
+        container.querySelector(".layer-ui__library")!,
+        "dropdown-menu-button",
+      )!,
+    );
+
+    // the reset item carries no data-testid, so select it by its visible label
+    const resetItem = Array.from(
+      container.querySelectorAll(".dropdown-menu-item"),
+    ).find((el) => el.textContent?.includes("Reset library"))!;
+    expect(resetItem).toBeTruthy();
+    fireEvent.click(resetItem);
+
+    // the shared ActiveConfirmDialog (rendered by LayerUI, outside the
+    // library sidebar) must appear
+    await waitFor(() => {
+      expect(document.querySelector(".confirm-dialog")).toBeTruthy();
+    });
+
+    fireEvent.click(
+      Array.from(document.querySelectorAll(".confirm-dialog button")).find(
+        (el) => el.textContent?.includes("Confirm"),
+      )!,
+    );
+
+    await waitFor(async () => {
+      expect((await h.app.library.getLatestLibrary()).length).toBe(0);
+    });
+  });
 });
 
 describe("distributeLibraryItemsOnSquareGrid()", () => {
