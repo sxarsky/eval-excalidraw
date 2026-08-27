@@ -12,6 +12,7 @@ import { useLibraryCache } from "../hooks/useLibraryItemSvg";
 import { t } from "../i18n";
 
 import { useApp, useExcalidrawSetAppState } from "./App";
+import { activeConfirmDialogAtom } from "./ActiveConfirmDialog";
 import ConfirmDialog from "./ConfirmDialog";
 import { Dialog } from "./Dialog";
 import { isLibraryMenuOpenAtom } from "./LibraryMenu";
@@ -58,6 +59,7 @@ export const LibraryDropdownMenuButton: React.FC<{
   const [isLibraryMenuOpen, setIsLibraryMenuOpen] = useAtom(
     isLibraryMenuOpenAtom,
   );
+  const [, setActiveConfirmDialog] = useAtom(activeConfirmDialogAtom);
 
   const renderRemoveLibAlert = () => {
     const content = selectedItems.length
@@ -231,7 +233,13 @@ export const LibraryDropdownMenuButton: React.FC<{
           )}
           {!!items.length && (
             <DropdownMenu.Item
-              onSelect={() => setShowRemoveLibAlert(true)}
+              onSelect={() => {
+                if (!itemsSelected) {
+                  setActiveConfirmDialog("removeAllLibrary");
+                } else {
+                  setShowRemoveLibAlert(true);
+                }
+              }}
               icon={TrashIcon}
             >
               {resetLabel}
