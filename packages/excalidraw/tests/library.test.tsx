@@ -1,4 +1,4 @@
-import { act, queryByTestId } from "@testing-library/react";
+import { act, queryByTestId, queryByText } from "@testing-library/react";
 import React from "react";
 import { vi } from "vitest";
 
@@ -267,6 +267,65 @@ describe("library menu", () => {
       expect(latestLibrary[0].elements).toEqual([
         expect.objectContaining(strippedElement),
       ]);
+    });
+  });
+
+  it("should reset library only after confirming the Reset library dialog", async () => {
+    const { container } = await render(<Excalidraw />);
+
+    // the "Reset library" dropdown item is gated on `!!items.length`,
+    // so seed the library before opening the menu
+    const items: LibraryItems = [
+      {
+        id: "lib-1",
+        status: "unpublished",
+        elements: [API.createElement({ type: "rectangle", id: "el-1" })],
+        created: 1,
+      },
+      {
+        id: "lib-2",
+        status: "unpublished",
+        elements: [API.createElement({ type: "rectangle", id: "el-2" })],
+        created: 2,
+      },
+    ];
+    await act(async () => {
+      await h.app.library.setLibrary(items);
+    });
+    expect((await h.app.library.getLatestLibrary()).length).toBe(2);
+
+    const openResetDialog = () => {
+      fireEvent.click(container.querySelector(".sidebar-trigger")!);
+      fireEvent.click(
+        queryByTestId(
+          container.querySelector(".layer-ui__library")!,
+          "dropdown-menu-button",
+        )!,
+      );
+      fireEvent.click(queryByText(container, "Reset library")!);
+    };
+
+    // cancelling must leave the library untouched
+    openResetDialog();
+    const cancelDialog = document.querySelector(".confirm-dialog")!;
+    expect(cancelDialog).not.toBe(null);
+    await act(async () => {
+      fireEvent.click(cancelDialog.querySelector('[aria-label="Cancel"]')!);
+    });
+    await waitFor(async () => {
+      expect((await h.app.library.getLatestLibrary()).length).toBe(2);
+    });
+    expect(document.querySelector(".confirm-dialog")).toBe(null);
+
+    // confirming must clear the library
+    openResetDialog();
+    const confirmDialog = document.querySelector(".confirm-dialog")!;
+    expect(confirmDialog).not.toBe(null);
+    await act(async () => {
+      fireEvent.click(confirmDialog.querySelector('[aria-label="Confirm"]')!);
+    });
+    await waitFor(async () => {
+      expect((await h.app.library.getLatestLibrary()).length).toBe(0);
     });
   });
 });
