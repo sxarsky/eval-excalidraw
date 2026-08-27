@@ -451,7 +451,15 @@ describe("<Excalidraw/>", () => {
         queryByTestId(container, "toggle-dark-mode")?.textContent,
       ).toContain(t("buttons.darkMode"));
 
+      expect(document.documentElement.getAttribute("data-theme")).toBe(
+        THEME.LIGHT,
+      );
+
       fireEvent.click(queryByTestId(container, "toggle-dark-mode")!);
+
+      expect(document.documentElement.getAttribute("data-theme")).toBe(
+        THEME.DARK,
+      );
 
       expect(
         queryByTestId(container, "toggle-dark-mode")?.textContent,
