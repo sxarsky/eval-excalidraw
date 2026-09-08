@@ -239,7 +239,7 @@ describe("<Excalidraw/>", () => {
         );
         //open menu
         toggleMenu(container);
-        expect(queryByTestId(container, "toggle-dark-mode")).toBeNull();
+        expect(queryByTestId(container, "toggle-theme")).toBeNull();
       });
 
       it("should not render default items in custom menu even if passed if the prop in `canvasActions` is set to false", async () => {
@@ -272,7 +272,7 @@ describe("<Excalidraw/>", () => {
       expect(h.state.theme).toBe(THEME.LIGHT);
       //open menu
       toggleMenu(container);
-      const darkModeToggle = queryByTestId(container, "toggle-dark-mode");
+      const darkModeToggle = queryByTestId(container, "toggle-theme");
       expect(darkModeToggle).toBeTruthy();
     });
 
@@ -282,7 +282,7 @@ describe("<Excalidraw/>", () => {
       expect(h.state.theme).toBe(THEME.DARK);
       //open menu
       toggleMenu(container);
-      expect(queryByTestId(container, "toggle-dark-mode")).toBe(null);
+      expect(queryByTestId(container, "toggle-theme")).toBe(null);
     });
 
     it("should show theme mode toggle when `UIOptions.canvasActions.toggleTheme` is true", async () => {
@@ -295,7 +295,7 @@ describe("<Excalidraw/>", () => {
       expect(h.state.theme).toBe(THEME.DARK);
       //open menu
       toggleMenu(container);
-      const darkModeToggle = queryByTestId(container, "toggle-dark-mode");
+      const darkModeToggle = queryByTestId(container, "toggle-theme");
       expect(darkModeToggle).toBeTruthy();
     });
 
@@ -309,7 +309,7 @@ describe("<Excalidraw/>", () => {
       expect(h.state.theme).toBe(THEME.DARK);
       //open menu
       toggleMenu(container);
-      const darkModeToggle = queryByTestId(container, "toggle-dark-mode");
+      const darkModeToggle = queryByTestId(container, "toggle-theme");
       expect(darkModeToggle).toBe(null);
     });
 
@@ -448,13 +448,13 @@ describe("<Excalidraw/>", () => {
       expect(h.state.theme).toBe(THEME.LIGHT);
 
       expect(
-        queryByTestId(container, "toggle-dark-mode")?.textContent,
+        queryByTestId(container, "toggle-theme")?.textContent,
       ).toContain(t("buttons.darkMode"));
 
-      fireEvent.click(queryByTestId(container, "toggle-dark-mode")!);
+      fireEvent.click(queryByTestId(container, "toggle-theme")!);
 
       expect(
-        queryByTestId(container, "toggle-dark-mode")?.textContent,
+        queryByTestId(container, "toggle-theme")?.textContent,
       ).toContain(t("buttons.lightMode"));
     });
   });
