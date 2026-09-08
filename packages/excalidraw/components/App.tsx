@@ -103,7 +103,6 @@ import {
   getFormFactor,
   deriveStylesPanelMode,
   isIOS,
-  isBrave,
   isSafari,
   type EditorInterface,
   type StylesPanelMode,
@@ -203,7 +202,6 @@ import {
   wrapText,
   isElementLink,
   parseElementLinkFromURL,
-  isMeasureTextSupported,
   normalizeText,
   measureText,
   getLineHeightInPx,
@@ -442,7 +440,6 @@ import ConvertElementTypePopup, {
 } from "./ConvertElementTypePopup";
 
 import { activeConfirmDialogAtom } from "./ActiveConfirmDialog";
-import BraveMeasureTextError from "./BraveMeasureTextError";
 import { ContextMenu, CONTEXT_MENU_SEPARATOR } from "./ContextMenu";
 import { activeEyeDropperAtom } from "./EyeDropper";
 import FollowMode from "./FollowMode/FollowMode";
@@ -3169,13 +3166,6 @@ class App extends React.Component<AppProps, AppState> {
       this.restoreFileFromShare();
     } else {
       this.updateDOMRect(this.initializeScene);
-    }
-
-    // note that this check seems to always pass in localhost
-    if (isBrave() && !isMeasureTextSupported()) {
-      this.setState({
-        errorMessage: <BraveMeasureTextError />,
-      });
     }
 
     const mountPayload = {
