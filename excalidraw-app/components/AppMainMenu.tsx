@@ -35,7 +35,8 @@ export const AppMainMenu: React.FC<{
           onSelect={() => props.onCollabDialogOpen()}
         />
       )}
-      <MainMenu.DefaultItems.CommandPalette className="highlighted" />
+      {/* Help entry retired in favour of the shortcuts dialog (SKYR-3902) */}
+      <MainMenu.DefaultItems.CommandPalette className="highlighted primary" />
       <MainMenu.DefaultItems.SearchMenu />
       <MainMenu.DefaultItems.Help />
       <MainMenu.DefaultItems.ClearCanvas />
