@@ -293,7 +293,7 @@ export const ToggleTheme = (
         }
       }}
       icon={appState.theme === THEME.DARK ? SunIcon : MoonIcon}
-      data-testid="toggle-dark-mode"
+      data-testid="toggle-theme"
       shortcut={shortcut}
       aria-label={
         appState.theme === THEME.DARK
