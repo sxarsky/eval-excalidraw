@@ -58,11 +58,14 @@ export const useHandleAppTheme = () => {
     localStorage.setItem(STORAGE_KEYS.LOCAL_STORAGE_THEME, appTheme);
 
     if (appTheme === "system") {
-      setEditorTheme(
-        getDarkThemeMediaQuery()?.matches ? THEME.DARK : THEME.LIGHT,
-      );
+      const resolvedTheme = getDarkThemeMediaQuery()?.matches
+        ? THEME.DARK
+        : THEME.LIGHT;
+      setEditorTheme(resolvedTheme);
+      document.documentElement.setAttribute("data-theme", resolvedTheme);
     } else {
       setEditorTheme(appTheme);
+      document.documentElement.setAttribute("data-theme", appTheme);
     }
   }, [appTheme]);
 

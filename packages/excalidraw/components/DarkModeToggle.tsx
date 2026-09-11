@@ -27,9 +27,12 @@ export const DarkModeToggle = (props: {
       icon={props.value === THEME.LIGHT ? ICONS.MOON : ICONS.SUN}
       title={title}
       aria-label={title}
-      onClick={() =>
-        props.onChange(props.value === THEME.DARK ? THEME.LIGHT : THEME.DARK)
-      }
+      onClick={() => {
+        const nextTheme =
+          props.value === THEME.DARK ? THEME.LIGHT : THEME.DARK;
+        document.documentElement.setAttribute("data-theme", nextTheme);
+        props.onChange(nextTheme);
+      }}
       data-testid="toggle-dark-mode"
     />
   );
