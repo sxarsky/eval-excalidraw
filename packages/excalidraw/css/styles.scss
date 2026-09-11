@@ -292,6 +292,7 @@ body.excalidraw-cursor-resize * {
   .App-toolbar {
     display: flex;
     justify-content: center;
+    border: 2px solid var(--color-primary);
 
     .eraser {
       &.ToolIcon:hover {
