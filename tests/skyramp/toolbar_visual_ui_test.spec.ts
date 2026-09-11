@@ -27,6 +27,14 @@ test('testUi', async ({ page }, testInfo) => {
     // Wrap playwright page with Skyramp page
     page = newSkyrampPlaywrightPage(page, testInfo);
 
+    const pageErrors: string[] = [];
+    page.on('pageerror', (err) => pageErrors.push(err.message));
+
+    await page.goto(baseUrl);
+
             await expect(page.locator(".App-toolbar").first()).toBeVisible();
+    await expect(page.locator(".App-toolbar").first()).toHaveCSS("border", "2px solid rgb(105, 101, 219)");
     await expect(page.locator(".App-toolbar").first()).toHaveScreenshot("toolbar.png", { maxDiffPixelRatio: 0.005 });
+
+    expect(pageErrors).toHaveLength(0);
 });
