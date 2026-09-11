@@ -62,6 +62,8 @@ import { JSONExportDialog } from "./JSONExportDialog";
 import { LaserPointerButton } from "./LaserPointerButton";
 import { Toast } from "./Toast";
 
+import { COLOR_MODE_STORAGE_KEY, resolveColorMode } from "../colorMode";
+
 import "./LayerUI.scss";
 import "./Toolbar.scss";
 
@@ -122,6 +124,10 @@ const DefaultMainMenu: React.FC<{
         <MainMenu.DefaultItems.Socials />
       </MainMenu.Group>
       <MainMenu.Separator />
+      {/* Theme preference is persisted via COLOR_MODE_STORAGE_KEY so it
+           survives page reload. Elements with a per-element colorMode
+           override (see packages/excalidraw/colorMode.ts) ignore this
+           global setting. */}
       <MainMenu.DefaultItems.ToggleTheme />
       <MainMenu.DefaultItems.ChangeCanvasBackground />
     </MainMenu>
@@ -185,6 +191,17 @@ const LayerUI = ({
   const TunnelsJotaiProvider = tunnels.tunnelsJotai.Provider;
 
   const [eyeDropperState, setEyeDropperState] = useAtom(activeEyeDropperAtom);
+
+  // Persist theme selection and resolve effective color mode using colorMode utilities.
+  const storedTheme = localStorage.getItem(COLOR_MODE_STORAGE_KEY);
+  if (appState.theme && appState.theme !== storedTheme) {
+    localStorage.setItem(COLOR_MODE_STORAGE_KEY, appState.theme);
+  }
+  const effectiveColorMode = resolveColorMode(
+    undefined,
+    (storedTheme as "light" | "dark") ?? appState.theme,
+  );
+  document.documentElement.setAttribute("data-color-mode", effectiveColorMode);
 
   const renderJSONExportDialog = () => {
     if (!UIOptions.canvasActions.export) {
